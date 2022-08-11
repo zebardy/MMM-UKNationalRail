@@ -24,7 +24,6 @@ module.exports = NodeHelper.create({
 
   getTimetable: function () {
     var self = this;
-    var retry = true;
 
     if (this.rail === null) {
       return;
