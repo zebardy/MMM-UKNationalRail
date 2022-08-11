@@ -50,7 +50,7 @@
 }
 
 /* Statuses */
-.late {
+.late, .cancelled {
   color: #ff0000;
 }
 
@@ -62,7 +62,7 @@
   color: #00ff00
 }
 
-.nonews {
+.nonews, .ontime {
   color: #ffffff
 }
 

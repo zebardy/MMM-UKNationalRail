@@ -127,6 +127,10 @@ Module.register("MMM-UKNationalRail", {
               cell.innerHTML = train[colName];
               cell.classname = colName;
               
+              if(colName === "status") {
+                 cell.classname += " " + train[colName].replace(" ","").toLowerCase();
+              }
+              
               row.appendChild(cell);
            }
            
@@ -154,13 +158,25 @@ Module.register("MMM-UKNationalRail", {
        for(var entry in data) {
           
           var train = data[entry];
+          var status = ""
+          
+          if(train.etd === "Cancelled") {
+             status = "Cancelled";
+          }
+          if(train.etd === "On Time") {
+             status = "On Time";
+          }
+          if(status === "" && train.etd) {
+             status = "Late";
+          }
           
           this.trains.push({
-             "platform": train.platform,
+             "platform": train.platform !== null ? train.platform : "",
              "destination": train.destination.name,
              "origin": train.origin.name,
              "dep_scheduled": train.std,
-             "dep_estimated": train.etd
+             "dep_estimated": train.etd,
+             "status": status
           });
        }
        
