@@ -1,4 +1,4 @@
-# Obtaining The CRS Code for your rail station #
+# Obtaining The CRS Code for your rail station
 
 Go to [OpenstreetMap.org](https://www.openstreetmap.org).
 

@@ -9,7 +9,7 @@
 }
 
 /* Destination */
- .destination {
+.destination {
   max-width: 135px;
   overflow: hidden;
   padding-left: 5px;
@@ -50,7 +50,8 @@
 }
 
 /* Statuses */
-.late, .cancelled {
+.late,
+.cancelled {
   color: #ff0000;
 }
 
@@ -59,11 +60,12 @@
 }
 
 .goodnews {
-  color: #00ff00
+  color: #00ff00;
 }
 
-.nonews, .ontime {
-  color: #ffffff
+.nonews,
+.ontime {
+  color: #ffffff;
 }
 
 .stationName {
