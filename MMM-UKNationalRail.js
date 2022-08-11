@@ -114,9 +114,7 @@ Module.register("MMM-UKNationalRail", {
         var table = document.createElement("table");
         table.className = "small";
 
-        for(var entry in this.trains) {
-           var train = this.trains[entry];
-           
+        for(var train in this.trains) {
            var row = document.createElement("tr");
            table.appendChild(row);
            
