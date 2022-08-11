@@ -148,7 +148,7 @@ Module.register("MMM-UKNationalRail", {
           return;
        }
        
-       this.trains = {}
+       this.trains = [];
        
        for(var entry in data) {
           
