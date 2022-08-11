@@ -52,7 +52,7 @@
 /* Statuses */
 .late,
 .cancelled {
-  color: #ff0000;
+  color: #f00;
 }
 
 .early {
@@ -60,21 +60,10 @@
 }
 
 .goodnews {
-  color: #00ff00;
+  color: #0f0;
 }
 
 .nonews,
 .ontime {
-  color: #ffffff;
-}
-
-.stationName {
-  text-align: left;
-  font-size: 15px;
-  font-family: "Roboto Condensed";
-  font-weight: 400;
-  line-height: 15px;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-  color: #999;
+  color: #fff;
 }
