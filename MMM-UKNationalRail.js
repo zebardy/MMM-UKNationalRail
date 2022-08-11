@@ -18,25 +18,13 @@ Module.register("MMM-UKNationalRail", {
         fadePoint: 0.25, // Start on 1/4th of the list.
         initialLoadDelay: 0, // start delay seconds.
 
-        apiBase: 'https://transportapi.com/v3/uk/train/station/',
+        station: '', // CRS code for station
+        token: '',
 
-        stationCode: '', // CRS code for station
-        app_key: '', // TransportAPI App Key
-        app_id: '', // TransportAPI App ID
-
-        called_at: '',
-        calling_at: '',
-        darwin: false,
         destination: '',
-        from_offset: '',
-        operator: '',
-        origin: '',
-        service: '',
-        to_offset: '',
-        train_status: '',
-        type: '',
 
         maxResults: 5, //Maximum number of results to display
+        
         showOrigin: false, //Show origin of train
         showPlatform: true, //Show departure platform of train
         showActualDeparture: true, //Show real-time departure time
@@ -68,12 +56,8 @@ Module.register("MMM-UKNationalRail", {
 
         this.trains = {};
         this.loaded = false;
-
-        this.url = encodeURI(this.config.apiBase + this.config.stationCode + '/live.json' + this.getParams());
-
-        if (this.config.debug) {
-            Log.warn('URL Request is: ' + this.url);
-        }
+        
+        this.sendSocketNotification("UKNR_CONFIG", this.config);
 
         // Initial start up delay via a timeout
         this.updateTimer = setTimeout(() => {
@@ -90,7 +74,7 @@ Module.register("MMM-UKNationalRail", {
     // Trigger an update of our train data
     fetchTrainInfo: function() {
         if (!this.hidden) {
-            this.sendSocketNotification("GET_TRAININFO", { 'url': this.url } );
+            this.sendSocketNotification("UKNR_TRAININFO", { } );
         }
     },
 
@@ -98,20 +82,14 @@ Module.register("MMM-UKNationalRail", {
     getDom: function() {
         var wrapper = document.createElement("div");
 
-        if (this.config.stationCode === "") {
-            wrapper.innerHTML = "Please set the Station Code: " + this.stationCode + ".";
+        if (this.config.station === "") {
+            wrapper.innerHTML = "Please set the Station Code.";
             wrapper.className = "dimmed light small";
             return wrapper;
         }
 
-        if (this.config.app_id === "") {
-            wrapper.innerHTML = "Please set the application ID: " + this.app_id + ".";
-            wrapper.className = "dimmed light small";
-            return wrapper;
-        }
-
-        if (this.config.app_key === "") {
-            wrapper.innerHTML = "Please set the application key: " + this.app_key + ".";
+        if (this.config.token === "") {
+            wrapper.innerHTML = "Please set the OpenLDBWS token";
             wrapper.className = "dimmed light small";
             return wrapper;
         }
@@ -252,135 +230,13 @@ Module.register("MMM-UKNationalRail", {
      * argument data object - Weather information received form openweather.org.
      */
     processTrains: function(data) {
-
-        //Check we have data back from API
-        if (typeof data !== 'undefined' && data !== null) {
-
-            //define object to hold train info
-            this.trains = {};
-            //Define array of departure data
-            this.trains.data = [];
-            //Define timestamp of current data
-            this.trains.timestamp = new Date();
-            //Define message holder
-            this.trains.message = null;
-
-            //Figure out Station Name
-            //Define empty name
-            var stationName = "";
-
-            if (typeof data.station_name !== 'undefined' && data.station_name !== null) {
-                //Populate with stop name returned by TransportAPI info
-                stationName = data.station_name;
-            } else {
-                //Default
-                stationName = "Departures";
-            }
-            //Set value
-            this.trains.stationName = stationName;
-
-            //See if the data is Arrivals or Updates instead of departures
-            if (typeof data.arrivals !== 'undefined' && data.arrivals !== null) {
-
-                if (this.config.debug) {
-                    Log.error("Arrival detected");
-                }
-                //Change label to departures
-                var deps = data.arrivals;
-                data.departures = deps;
-                delete data.arrivals;
-            }
-            else if (typeof data.updates !== 'undefined' && data.updates !== null) {
-
-                if (this.config.debug) {
-                    Log.error("Update detected");
-                }
-                //Change label to departures
-                var deps = data.updates;
-                data.departures = deps;
-                delete data.updates;
-            }
-            else if (typeof data.passes !== 'undefined' && data.passes !== null) {
-
-                if (this.config.debug) {
-                    Log.error("Pass detected");
-                }
-                //Change label to departures
-                var deps = data.passes;
-
-                data.departures = deps;
-                delete data.passes;
-            }
-
-            //Check we have route info
-            if (typeof data.departures !== 'undefined' && data.departures !== null) {
-
-                //... and some departures
-				if (typeof data.departures.all !== 'undefined' && data.departures.all !== null) {
-
-                    //.. and actual departures
-                    if (data.departures.all.length > 0) {
-
-                        //Figure out how long the results are
-                        var counter = 0;
-                        if (this.config.maxResults > data.departures.all.length) {
-                            counter = data.departures.all.length;
-                        } else {
-                            counter = this.config.maxResults;
-                        }
-
-                        for (var i = 0; i < counter; i++) {
-
-                            var thisTrain = data.departures.all[i];
-
-                            this.trains.data.push({
-                                plannedDeparture: thisTrain.aimed_departure_time,
-                                actualDeparture: thisTrain.expected_departure_time,
-                                status: thisTrain.status,
-                                origin: thisTrain.origin_name,
-                                destination: thisTrain.destination_name,
-                                leavesIn: thisTrain.best_arrival_estimate_mins,
-                                platform: thisTrain.platform
-                            });
-                        }
-                    } else {
-                        //No departures info returned - set message
-                        this.trains.message = "No departure info found";
-                        if (this.config.debug) {
-                            Log.error("=======LEVEL 4=========");
-                            Log.error(this.trains);
-                            Log.error("^^^^^^^^^^^^^^^^^^^^^^^");
-                        }
-                    }
-                } else {
-                    //No departures info returned - set message
-                    this.trains.message = "No departures scheduled";
-                    if (this.config.debug) {
-                        Log.error("=======LEVEL 3=========");
-                        Log.error(this.trains);
-                        Log.error("^^^^^^^^^^^^^^^^^^^^^^^");
-                    }
-                }
-            } else {
-                //No info returned - set message
-                this.trains.message = "No info about the station returned";
-                if (this.config.debug) {
-                    Log.error("=======LEVEL 2=========");
-                    Log.error(this.trains);
-                    Log.error("^^^^^^^^^^^^^^^^^^^^^^^");
-                }
-            }
-
-        } else {
-            //No data returned - set message
-            this.trains.message = "No data returned";
-            if (this.config.debug) {
-                Log.error("=======LEVEL 1=========");
-                Log.error(this.trains);
-                Log.error("^^^^^^^^^^^^^^^^^^^^^^^");
-            }
-        }
-
+       
+       if (typeof data == 'undefined' || data == null) {
+          return;
+       }
+       
+       this.trains = {}
+       
         this.loaded = true;
         this.updateDom(this.config.animationSpeed);
     },
@@ -449,10 +305,12 @@ Module.register("MMM-UKNationalRail", {
 
     // Process data returned
     socketNotificationReceived: function(notification, payload) {
-
-        if (notification === 'TRAIN_DATA' && payload.url === this.url) {
-            this.processTrains(payload.data);
-        }
+       
+       switch(notification) {
+       case "UKNR_DATA":
+          this.processTrains(payload.data);
+          break;
+       }
     }
 
 });
