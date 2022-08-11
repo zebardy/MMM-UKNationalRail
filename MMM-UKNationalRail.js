@@ -23,7 +23,7 @@ Module.register("MMM-UKNationalRail", {
 
         maxResults: 5, //Maximum number of results to display
         
-        columns: {'platform', 'destination', 'origin', 'dep_estimated', 'dep_scheduled' },
+        columns: [ 'platform', 'destination', 'origin', 'dep_estimated', 'dep_scheduled' ],
         
         showOrigin: false, //Show origin of train
         showPlatform: true, //Show departure platform of train
