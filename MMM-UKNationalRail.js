@@ -23,7 +23,7 @@ Module.register("MMM-UKNationalRail", {
 
         maxResults: 5, //Maximum number of results to display
         
-        columns: [ 'platform', 'destination', 'origin', 'dep_estimated', 'dep_scheduled' ],
+        columns: [ 'platform', 'destination', 'origin', 'status', 'dep_estimated' ],
         
         showOrigin: false, //Show origin of train
         showPlatform: true, //Show departure platform of train
@@ -162,9 +162,11 @@ Module.register("MMM-UKNationalRail", {
           
           if(train.etd === "Cancelled") {
              status = "Cancelled";
+             train.etd = "";
           }
           if(train.etd === "On Time") {
              status = "On Time";
+             train.etd = train.std;
           }
           if(status === "" && train.etd) {
              status = "Late";
