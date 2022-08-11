@@ -114,7 +114,9 @@ Module.register("MMM-UKNationalRail", {
         var table = document.createElement("table");
         table.className = "small";
 
-        for(var train in this.trains) {
+        for(var entry in this.trains) {
+           var train = this.trains[entry];
+           
            var row = document.createElement("tr");
            table.appendChild(row);
            
@@ -149,12 +151,15 @@ Module.register("MMM-UKNationalRail", {
        this.trains = {}
        
        for(var entry in data) {
+          
+          var train = data[entry];
+          
           this.trains.push({
-             "platform": entry.platform,
-             "destination": entry.destination.name,
-             "origin": entry.origin.name,
-             "dep_scheduled": entry.std,
-             "dep_estimated": entry.etd
+             "platform": train.platform,
+             "destination": train.destination.name,
+             "origin": train.origin.name,
+             "dep_scheduled": train.std,
+             "dep_estimated": train.etd
           });
        }
        
