@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/nwootton/MMM-UKNationalRail#readme",
   "dependencies": {
+    "national-rail-darwin": "^1.0.8",
     "request": "^2.81.0"
   }
 }
