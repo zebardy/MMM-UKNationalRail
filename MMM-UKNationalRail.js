@@ -19,16 +19,14 @@ Module.register("MMM-UKNationalRail", {
         station: '', // CRS code for station
         token: '',
 
-        destination: '',
+        filterDestination: '', // CRS code for station - only display departures calling here
+        filterCancelled: false, // Filter out cancelled departures
 
-        maxResults: 5, //Maximum number of results to display
+        fetchRows: 20, // Maximum number of results to fetch (pre-filtering)
+        displayRows: 10, // Maximum number of results to display (post-filtering)
         
         columns: [ 'platform', 'destination', 'origin', 'status', 'dep_estimated' ],
         
-        showOrigin: false, //Show origin of train
-        showPlatform: true, //Show departure platform of train
-        showActualDeparture: true, //Show real-time departure time
-
         debug: false
     },
 
@@ -158,8 +156,14 @@ Module.register("MMM-UKNationalRail", {
        for(var entry in data) {
           
           var train = data[entry];
-          var status = ""
+          var status = "";
           
+          // Run filters first
+          if(train.etd === "Cancelled" && this.config.filterCancelled === true) {
+             continue;
+          }
+          
+          // Set status field appropriately
           if(train.etd === "Cancelled") {
              status = "Cancelled";
              train.etd = "";
@@ -182,68 +186,6 @@ Module.register("MMM-UKNationalRail", {
        
         this.loaded = true;
         this.updateDom(this.config.animationSpeed);
-    },
-
-
-    /* getParams(compliments)
-     * Generates an url with api parameters based on the config.
-     *
-     * return String - URL params.
-     */
-    getParams: function() {
-        var params = "?";
-        params += "app_id=" + this.config.app_id;
-        params += "&app_key=" + this.config.app_key;
-
-        if (this.config.called_at.length > 0) {
-            params += "&called_at=" + this.config.called_at;
-        }
-
-        if (this.config.calling_at.length > 0) {
-            params += "&calling_at=" + this.config.calling_at;
-        }
-
-        if (this.config.darwin) {
-            params += "&darwin=" + this.config.darwin;
-        }
-
-        if (this.config.destination.length > 0) {
-            params += "&destination=" + this.config.destination;
-        }
-
-        if (this.config.from_offset.length > 0) {
-            params += "&from_offset=" + this.config.from_offset;
-        }
-
-        if (this.config.operator.length > 0) {
-            params += "&operator=" + this.config.operator;
-        }
-
-        if (this.config.origin.length > 0) {
-            params += "&origin=" + this.config.origin;
-        }
-
-        if (this.config.service.length > 0) {
-            params += "&service=" + this.config.service;
-        }
-
-        if (this.config.to_offset.length > 0) {
-            params += "&to_offset=" + this.config.to_offset;
-        }
-
-        if (this.config.train_status.length > 0) {
-            params += "&train_status=" + this.config.train_status;
-        }
-
-        if (this.config.type.length > 0) {
-            params += "&type=" + this.config.type;
-        }
-
-        if (this.config.debug) {
-            Log.warn(params);
-        }
-
-        return params;
     },
 
     // Process data returned

@@ -27,9 +27,17 @@ module.exports = NodeHelper.create({
       if (this.rail === null) {
          return;
       }
+      
+      var options = { };
+      
+      options.rows = this.config.fetchRows;
+      
+      if(this.config.filterDestination !== "") {
+         options.destination = this.config.filterDestination;
+      }
 
       Log.info("Sending request for departure board information");
-      this.rail.getDepartureBoard(this.config.station, {}, function(error, result) {
+      this.rail.getDepartureBoard(this.config.station, options, function(error, result) {
          Log.info("Return from getDepartureBoard: " + error + " - " + result);
          
          if (!error) {
