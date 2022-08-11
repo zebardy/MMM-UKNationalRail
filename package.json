@@ -1,27 +1,41 @@
 {
-  "name": "mmm-uknationalrail",
-  "version": "0.0.2",
+  "name": "MMM-UKNationalRail",
+  "version": "2.0.0",
   "description": "Realtime info for UK rail stations",
   "main": "MMM-UKNationalRail.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nwootton/MMM-UKNationalRail.git"
+    "url": "git+https://github.com/mattdy/MMM-UKNationalRail.git"
   },
   "keywords": [
     "Magic",
     "Mirror",
-    "Module"
+    "Module",
+    "National Rail",
+    "Trains"
   ],
-  "author": "NJW",
+  "scripts": {
+    "prettier": "prettier --write **/*.{js,css,json,md,yml}",
+    "test:prettier": "prettier --check **/*.{js,css,json,md,yml}",
+    "test:js": "eslint **/*.js --config .eslintrc.json",
+    "test:css": "stylelint **/*.css --config .stylelintrc.json"
+  },
+  "prettier": {
+    "trailingComma": "none"
+  },
+  "author": "Matt Dyson <matt@thedysons.net> (http://mattdyson.org)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nwootton/MMM-UKNationalRail/issues"
+    "url": "https://github.com/mattdy/MMM-UKNationalRail/issues"
   },
-  "homepage": "https://github.com/nwootton/MMM-UKNationalRail#readme",
+  "homepage": "https://github.com/mattdy/MMM-UKNationalRail#readme",
   "dependencies": {
     "national-rail-darwin": "^1.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "prettier": "^2.1.2",
+    "stylelint": "^13.7.2",
+    "stylelint-config-standard": "^20.0.0"
   }
 }
