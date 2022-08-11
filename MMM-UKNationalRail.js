@@ -39,7 +39,7 @@ Module.register("MMM-UKNationalRail", {
 
     // Define required scripts.
     getScripts: function() {
-        return ["moment.js", this.file('titleCase.js')];
+        return ["moment.js"];
     },
 
     //Define header for module.
