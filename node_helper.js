@@ -44,14 +44,7 @@ module.exports = NodeHelper.create({
          Log.info("Return from getDepartureBoard: " + error + " - " + result);
          
          if (!error) {
-            Log.info("Sending socket notification");
-            try {
-               self.sendSocketNotification('UKNR_DATA', result);
-               Log.info("Sent socket notification");
-            } catch(exception) {
-               Log.error("Error sending socket notification: " + exception);
-            }
-
+            self.sendSocketNotification('UKNR_DATA', result);
          }
       });
    },
