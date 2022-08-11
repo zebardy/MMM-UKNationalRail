@@ -32,12 +32,21 @@ module.exports = NodeHelper.create({
       this.rail.getDepartureBoard(this.config.station, {}, function(error,
             result) {
          Log.info("Return from getDepartureBoard: " + error + " - " + result);
+         
          if (!error) {
             Log.info("Sending socket notification");
-            var parsed = JSON.parse(result);
-            Log.info("Parsed response: " + parsed)
-            self.sendSocketNotification('UKNR_DATA', parsed);
-            Log.info("Sent socket notification");
+            try {
+               Log.info("Parsing result");
+               var parsed = JSON.parse(result);
+               Log.info("Parsed response: " + parsed);
+               
+               self.sendSocketNotification('UKNR_DATA', parsed);
+               Log.info("Sent socket notification");
+            } catch(exception) {
+               Log.error("Error sending socket notification: " + exception);
+            }
+            
+            
          }
       });
    },
