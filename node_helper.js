@@ -36,11 +36,7 @@ module.exports = NodeHelper.create({
          if (!error) {
             Log.info("Sending socket notification");
             try {
-               Log.info("Parsing result");
-               var parsed = JSON.parse(result);
-               Log.info("Parsed response: " + parsed);
-               
-               self.sendSocketNotification('UKNR_DATA', parsed);
+               self.sendSocketNotification('UKNR_DATA', result);
                Log.info("Sent socket notification");
             } catch(exception) {
                Log.error("Error sending socket notification: " + exception);
