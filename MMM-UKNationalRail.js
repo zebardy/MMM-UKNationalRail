@@ -49,9 +49,6 @@ Module.register("MMM-UKNationalRail", {
   start: function () {
     Log.info("Starting module: " + this.name);
 
-    // Set locale.
-    moment.locale(config.language);
-
     this.trains = {};
     this.loaded = false;
 
@@ -118,7 +115,7 @@ Module.register("MMM-UKNationalRail", {
       table.appendChild(row);
 
       for (var column in this.config.columns) {
-        colName = this.config.columns[column];
+        var colName = this.config.columns[column];
         var cell = document.createElement("td");
 
         cell.innerHTML = train[colName];
