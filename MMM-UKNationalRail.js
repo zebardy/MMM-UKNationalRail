@@ -114,15 +114,18 @@ Module.register("MMM-UKNationalRail", {
         var table = document.createElement("table");
         table.className = "small";
 
-        for(var train in this.trains) {
+        for(var entry in this.trains) {
+           var train = this.trains[entry];
+           
            var row = document.createElement("tr");
            table.appendChild(row);
            
            for(var column in this.config.columns) {
+              colName = this.config.columns[column];
               var cell = document.createElement("td");
               
-              cell.innerHTML = train[column];
-              cell.classname = column;
+              cell.innerHTML = train[colName];
+              cell.classname = colName;
               
               row.appendChild(cell);
            }
