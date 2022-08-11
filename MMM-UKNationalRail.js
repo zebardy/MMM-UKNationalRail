@@ -128,7 +128,7 @@ Module.register("MMM-UKNationalRail", {
               cell.className = colName;
               
               if(colName === "status") {
-                 cell.classname += " " + train[colName].replace(" ","").toLowerCase();
+                 cell.className += " " + train[colName].replace(" ","").toLowerCase();
               }
               
               row.appendChild(cell);
