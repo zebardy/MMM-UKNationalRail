@@ -14,8 +14,6 @@ Module.register("MMM-UKNationalRail", {
     defaults: {
         updateInterval: 5 * 60 * 1000, // Update every 5 minutes.
         animationSpeed: 2000,
-        fade: true,
-        fadePoint: 0.25, // Start on 1/4th of the list.
         initialLoadDelay: 0, // start delay seconds.
 
         station: '', // CRS code for station
@@ -24,6 +22,8 @@ Module.register("MMM-UKNationalRail", {
         destination: '',
 
         maxResults: 5, //Maximum number of results to display
+        
+        columns: {'platform', 'destination', 'origin', 'dep_estimated', 'dep_scheduled' },
         
         showOrigin: false, //Show origin of train
         showPlatform: true, //Show departure platform of train
@@ -99,123 +99,34 @@ Module.register("MMM-UKNationalRail", {
             wrapper.className = "dimmed light small";
             return wrapper;
         }
+        
+        if(this.trains.length === 0) {
+           wrapper.innerHTML = "No trains found";
+           wrapper.className = "dimmed light small";
+           return wrapper
+        }
 
         //Dump train data
         if (this.config.debug) {
             Log.info(this.trains);
         }
 
-        // *** Start Building Table
         var table = document.createElement("table");
         table.className = "small";
 
-        //With data returned
-        if (this.trains.data.length > 0) {
-            for (var t in this.trains.data) {
-                var myTrain = this.trains.data[t];
-
-                //Create row for data item
-                var row = document.createElement("tr");
-                table.appendChild(row);
-
-                //If platform is required, create first table cell
-                if (this.config.showPlatform) {
-                    if (myTrain.platform) {
-                        platform = myTrain.platform;
-                    } else {
-                        platform = '-';
-                    }
-
-                    var trainPlatformCell = document.createElement("td");
-                    trainPlatformCell.innerHTML = " " + platform + " ";
-                    trainPlatformCell.className = "platform";
-                    row.appendChild(trainPlatformCell);
-                }
-
-                //Train destination cell
-                var trainDestCell = document.createElement("td");
-                trainDestCell.innerHTML = myTrain.destination;
-                trainDestCell.className = "bright dest";
-                row.appendChild(trainDestCell);
-
-                //If required train origin cell
-                if (this.config.showOrigin) {
-                    var trainOriginCell = document.createElement("td");
-                    trainOriginCell.innerHTML = myTrain.origin;
-                    trainOriginCell.className = "trainOrigin";
-                    row.appendChild(trainOriginCell);
-                }
-
-                //Timetabled departure time
-                var plannedDepCell = document.createElement("td");
-                plannedDepCell.innerHTML = myTrain.plannedDeparture;
-                plannedDepCell.className = "timeTabled";
-                row.appendChild(plannedDepCell);
-
-                //If required, live departure time
-                if (this.config.showActualDeparture) {
-                    var actualDepCell = document.createElement("td");
-                    if(myTrain.actualDeparture != null) { // Only display actual time if it exists
-                        actualDepCell.innerHTML = "(" + myTrain.actualDeparture + ")";
-                    } else {
-                        actualDepCell.innerHTML = "&nbsp;";
-                    }
-                    actualDepCell.className = "actualTime";
-                    row.appendChild(actualDepCell);
-                }
-
-                //Train status cell
-                var statusCell = document.createElement("td");
-                statusCell.innerHTML = " " + titleCase(myTrain.status) + " ";
-
-                if (myTrain.status == "ON TIME") {
-                    statusCell.className = "bright nonews status";
-                } else if (myTrain.status == "LATE") {
-                    statusCell.className = "bright late status";
-                } else if (myTrain.status == "EARLY") {
-                    statusCell.className = "bright early status";
-                } else if (myTrain.status == "CANCELLED") {
-                    statusCell.className = "late status";
-                } else if (myTrain.status == "ARRIVED") {
-                    statusCell.className = "early status";
-                } else if (myTrain.status == "REINSTATEMENT" || myTrain.status == "STARTS HERE") {
-                    statusCell.className = "goodnews status";
-                } else if (myTrain.status == "NO REPORT" || myTrain.status == "OFF ROUTE") {
-                    statusCell.className = "nonews status";
-                } else {
-                    statusCell.className = "nonews status";
-                }
-
-                row.appendChild(statusCell);
-
-                if (this.config.fade && this.config.fadePoint < 1) {
-                    if (this.config.fadePoint < 0) {
-                        this.config.fadePoint = 0;
-                    }
-                    var startingPoint = this.trains.length * this.config.fadePoint;
-                    var steps = this.trains.length - startingPoint;
-                    if (t >= startingPoint) {
-                        var currentStep = t - startingPoint;
-                        row.style.opacity = 1 - (1 / steps * currentStep);
-                    }
-                }
-            }
-        } else {
-            var row1 = document.createElement("tr");
-            table.appendChild(row1);
-
-            var messageCell = document.createElement("td");
-            messageCell.innerHTML = " " + this.trains.message + " ";
-            messageCell.className = "bright";
-            row1.appendChild(messageCell);
-
-            var row2 = document.createElement("tr");
-            table.appendChild(row2);
-
-            var timeCell = document.createElement("td");
-            timeCell.innerHTML = " " + this.trains.timestamp + " ";
-            timeCell.className = "bright";
-            row2.appendChild(timeCell);
+        for(var train in this.trains) {
+           var row = document.createElement("tr");
+           table.appendChild(row);
+           
+           for(var column in this.config.columns) {
+              var cell = document.createElement("td");
+              
+              cell.innerHTML = train[column];
+              cell.classname = column;
+              
+              row.appendChild(cell);
+           }
+           
         }
 
         wrapper.appendChild(table);
@@ -236,6 +147,16 @@ Module.register("MMM-UKNationalRail", {
        }
        
        this.trains = {}
+       
+       for(var entry in data) {
+          this.trains.push({
+             "platform": entry.platform,
+             "destination": entry.destination.name,
+             "origin": entry.origin.name,
+             "dep_scheduled": entry.std,
+             "dep_estimated": entry.etd
+          });
+       }
        
         this.loaded = true;
         this.updateDom(this.config.animationSpeed);
@@ -308,7 +229,7 @@ Module.register("MMM-UKNationalRail", {
        
        switch(notification) {
        case "UKNR_DATA":
-          this.processTrains(payload.data);
+          this.processTrains(payload.trainServices);
           break;
        }
     }

@@ -29,8 +29,7 @@ module.exports = NodeHelper.create({
       }
 
       Log.info("Sending request for departure board information");
-      this.rail.getDepartureBoard(this.config.station, {}, function(error,
-            result) {
+      this.rail.getDepartureBoard(this.config.station, {}, function(error, result) {
          Log.info("Return from getDepartureBoard: " + error + " - " + result);
          
          if (!error) {
@@ -41,8 +40,7 @@ module.exports = NodeHelper.create({
             } catch(exception) {
                Log.error("Error sending socket notification: " + exception);
             }
-            
-            
+
          }
       });
    },
