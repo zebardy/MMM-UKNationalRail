@@ -125,7 +125,7 @@ Module.register("MMM-UKNationalRail", {
               var cell = document.createElement("td");
               
               cell.innerHTML = train[colName];
-              cell.classname = colName;
+              cell.className = colName;
               
               if(colName === "status") {
                  cell.classname += " " + train[colName].replace(" ","").toLowerCase();
@@ -171,7 +171,7 @@ Module.register("MMM-UKNationalRail", {
           }
           
           this.trains.push({
-             "platform": train.platform !== null ? train.platform : "",
+             "platform": train.platform !== undefined ? train.platform : "",
              "destination": train.destination.name,
              "origin": train.origin.name,
              "dep_scheduled": train.std,
