@@ -6,14 +6,14 @@
  * MIT Licensed.
  */
 
-var NodeHelper = require('node_helper');
-var request = require('request');
-var Rail = require('national-rail-darwin');
+const NodeHelper = require('node_helper');
+const Rail = require('national-rail-darwin');
+const Log = require("../../js/logger");
 
 module.exports = NodeHelper.create({
 
    start : function() {
-      console.log('MMM-UKNationalRail helper started');
+      Log.info('MMM-UKNationalRail helper started');
 
       this.started = false;
       this.config = null;
@@ -23,6 +23,8 @@ module.exports = NodeHelper.create({
    getTimetable : function() {
       var self = this;
       var retry = true;
+      
+      if(this.rail === null) { return; }
 
       this.rail.getDepartureBoard(this.config.station, {},
             function(err, result) {
