@@ -9,7 +9,7 @@
 }
 
 /* Destination */
- .dest {
+ .destination {
   max-width: 135px;
   overflow: hidden;
   padding-left: 5px;
@@ -20,7 +20,7 @@
 }
 
 /* Train origin station */
-.trainOrigin {
+.origin {
   max-width: 135px;
   overflow: hidden;
   padding-right: 10px;
@@ -36,11 +36,11 @@
   text-align: left;
 }
 
-.timeTabled {
+.dep_scheduled {
   padding-left: 10px;
 }
 
-.actualTime {
+.dep_estimated {
   padding-left: 10px;
 }
 
@@ -50,7 +50,7 @@
 }
 
 /* Statuses */
-.late {
+.late, .cancelled {
   color: #ff0000;
 }
 
@@ -62,7 +62,7 @@
   color: #00ff00
 }
 
-.nonews {
+.nonews, .ontime {
   color: #ffffff
 }
 
