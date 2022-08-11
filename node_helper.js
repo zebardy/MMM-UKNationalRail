@@ -1,8 +1,11 @@
-/* Live Station Info */
-
 /* Magic Mirror
- * Module: UK National Rail Info
- * By Nick Wootton
+ * Module: UK National Rail
+ *
+ * Originally by Nick Wootton
+ * Migrated to OpenLDBWS by Matt Dyson
+ * 
+ * https://github.com/mattdy/MMM-UKNationalRail
+ * 
  * MIT Licensed.
  */
 

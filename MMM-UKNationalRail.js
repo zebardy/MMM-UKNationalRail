@@ -1,10 +1,11 @@
-/* Timetable for Trains Module */
-
 /* Magic Mirror
  * Module: UK National Rail
  *
- * By Nick Wootton
- * based on SwissTransport module by Benjamin Angst http://www.beny.ch
+ * Originally by Nick Wootton
+ * Migrated to OpenLDBWS by Matt Dyson
+ * 
+ * https://github.com/mattdy/MMM-UKNationalRail
+ * 
  * MIT Licensed.
  */
 
@@ -140,9 +141,7 @@ Module.register("MMM-UKNationalRail", {
     },
 
     /* processTrains(data)
-     * Uses the received data to set the various values.
-     *
-     * argument data object - Weather information received form openweather.org.
+     * Build a list of trains from our received data feed, taking in to account our filters
      */
     processTrains: function(data) {
        
