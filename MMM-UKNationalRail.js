@@ -17,7 +17,7 @@ Module.register("MMM-UKNationalRail", {
         initialLoadDelay: 0, // start delay seconds.
 
         station: '', // CRS code for station
-        token: '',
+        token: '', // API token from http://realtime.nationalrail.co.uk/OpenLDBWSRegistration
 
         filterDestination: '', // CRS code for station - only display departures calling here
         filterCancelled: false, // Filter out cancelled departures
@@ -76,7 +76,7 @@ Module.register("MMM-UKNationalRail", {
         }
     },
 
-    // Override dom generator.
+    // Generate DOM based on current module state
     getDom: function() {
         var wrapper = document.createElement("div");
 
@@ -135,7 +135,6 @@ Module.register("MMM-UKNationalRail", {
         }
 
         wrapper.appendChild(table);
-        // *** End building results table
 
         return wrapper;
     },
@@ -154,6 +153,11 @@ Module.register("MMM-UKNationalRail", {
        this.trains = [];
        
        for(var entry in data) {
+          
+          // Stop processing if we've already reached the right number of rows to display
+          if(this.trains.length >= this.config.displayRows) {
+             break;
+          }
           
           var train = data[entry];
           var status = "";
@@ -174,6 +178,7 @@ Module.register("MMM-UKNationalRail", {
              status = "Late";
           }
           
+          // Add this train to our list
           this.trains.push({
              "platform": train.platform !== undefined ? train.platform : "",
              "destination": train.destination.name,
