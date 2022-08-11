@@ -61,3 +61,9 @@ You can configure the columns to display using the `columns` configuration optio
 ## OpenLDBWS Token
 
 The API token can be [obtained by registering here](http://realtime.nationalrail.co.uk/OpenLDBWSRegistration). Access is free for low-volume use.
+
+## Credits & Contributions
+
+This module was originally created by [Nick Wootton](https://github.com/nwootton/MMM-UKNationalRail) using [TransportAPI](http://transportapi.com/), but he chose to end supporting the module. In 2022, support was taken over by [Matt Dyson](https://github.com/mattdy/MMM-UKNationalRail), and was migrated to using [National Rail OpenLDBWS](http://realtime.nationalrail.co.uk/OpenLDBWSRegistration).
+
+All contributions to the module are welcome, in the form of pull requests, or bug reports. If you wish to make a gesture of thanks towards the developer, please consider a small donation [via this link](http://paypal.me/mattdy90)
