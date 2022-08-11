@@ -27,7 +27,7 @@ module.exports = NodeHelper.create({
       if(this.rail === null) { return; }
 
       this.rail.getDepartureBoard(this.config.station, {},
-            function(err, result) {
+            function(error, result) {
                if (!error) {
                   self.sendSocketNotification('UKNR_DATA', JSON.parse(result));
                }
