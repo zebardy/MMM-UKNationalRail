@@ -34,7 +34,9 @@ module.exports = NodeHelper.create({
          Log.info("Return from getDepartureBoard: " + error + " - " + result);
          if (!error) {
             Log.info("Sending socket notification");
-            self.sendSocketNotification('UKNR_DATA', JSON.parse(result));
+            var parsed = JSON.parse(result);
+            Log.info("Parsed response: " + parsed)
+            self.sendSocketNotification('UKNR_DATA', parsed);
             Log.info("Sent socket notification");
          }
       });
