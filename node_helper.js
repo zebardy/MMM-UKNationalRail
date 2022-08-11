@@ -23,15 +23,21 @@ module.exports = NodeHelper.create({
    getTimetable : function() {
       var self = this;
       var retry = true;
-      
-      if(this.rail === null) { return; }
 
-      this.rail.getDepartureBoard(this.config.station, {},
-            function(error, result) {
-               if (!error) {
-                  self.sendSocketNotification('UKNR_DATA', JSON.parse(result));
-               }
-            });
+      if (this.rail === null) {
+         return;
+      }
+
+      Log.debug("Sending request for departure board information");
+      this.rail.getDepartureBoard(this.config.station, {}, function(error,
+            result) {
+         Log.debug("Return from getDepartureBoard: " + error + " - " + result);
+         if (!error) {
+            Log.debug("Sending socket notification");
+            self.sendSocketNotification('UKNR_DATA', JSON.parse(result));
+            Log.debug("Sent socket notification");
+         }
+      });
    },
 
    socketNotificationReceived : function(notification, payload) {
