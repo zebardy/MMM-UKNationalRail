@@ -163,12 +163,10 @@ Module.register("MMM-UKNationalRail", {
           if(train.etd === "Cancelled") {
              status = "Cancelled";
              train.etd = "";
-          }
-          if(train.etd === "On Time") {
+          } else if(train.etd === "On Time") {
              status = "On Time";
              train.etd = train.std;
-          }
-          if(status === "" && train.etd) {
+          } else if(train.etd) {
              status = "Late";
           }
           
