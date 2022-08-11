@@ -28,14 +28,14 @@ module.exports = NodeHelper.create({
          return;
       }
 
-      Log.debug("Sending request for departure board information");
+      Log.info("Sending request for departure board information");
       this.rail.getDepartureBoard(this.config.station, {}, function(error,
             result) {
-         Log.debug("Return from getDepartureBoard: " + error + " - " + result);
+         Log.info("Return from getDepartureBoard: " + error + " - " + result);
          if (!error) {
-            Log.debug("Sending socket notification");
+            Log.info("Sending socket notification");
             self.sendSocketNotification('UKNR_DATA', JSON.parse(result));
-            Log.debug("Sent socket notification");
+            Log.info("Sent socket notification");
          }
       });
    },
