@@ -68,7 +68,7 @@ Module.register("MMM-UKNationalRail", {
   // Trigger an update of our train data
   fetchTrainInfo: function () {
     if (!this.hidden) {
-      this.sendSocketNotification("UKNR_TRAININFO", {});
+      this.sendSocketNotification("UKNR_TRAININFO", this.config);
     }
   },
 
