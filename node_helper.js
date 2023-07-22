@@ -44,10 +44,12 @@ module.exports = NodeHelper.create({
       config.station,
       options,
       function (error, result) {
-        Log.info("Return from getDepartureBoard: " + error.toString() + " - " + result);
 
         if (!error) {
+          Log.info("Return from getDepartureBoard: " + result);
           self.sendSocketNotification("UKNR_DATA", result);
+        } else {
+          Log.info("Return from getDepartureBoard: " + error.toString() + " - " + result);
         }
       }
     );
