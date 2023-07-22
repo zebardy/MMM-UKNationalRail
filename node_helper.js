@@ -39,7 +39,7 @@ module.exports = NodeHelper.create({
       options.destination = config.filterDestination;
     }
 
-    Log.info("Sending request for departure board information");
+    Log.info("Sending request for departure board information: station - " + config.station + " rows - " + options.rows);
     this.rail.getDepartureBoard(
       config.station,
       options,
@@ -56,6 +56,7 @@ module.exports = NodeHelper.create({
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
       case "UKNR_TRAININFO":
+        Log.info("MMM-UKNationalRail train info request");
         this.getTimetable(payload);
         break;
 
