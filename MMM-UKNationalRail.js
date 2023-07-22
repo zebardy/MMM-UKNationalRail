@@ -187,7 +187,7 @@ Module.register("MMM-UKNationalRail", {
   // Process data returned
   socketNotificationReceived: function (notification, payload) {
     switch (notification) {
-      case "UKNR_DATA":
+      case "UKNR_DATA_"+this.config.station:
         this.processTrains(payload.trainServices);
         break;
     }
