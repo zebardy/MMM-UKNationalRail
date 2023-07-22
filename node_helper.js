@@ -28,7 +28,7 @@ module.exports = NodeHelper.create({
       if (config.token === null {
         return;
       }
-      this.rail = new Rail(config.token)
+      this.rail = new Rail(config.token);
     }
 
     var options = {};
